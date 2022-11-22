@@ -1,0 +1,106 @@
+<!-- new -->
+<odoo>
+	<data>
+		<record id="action_report_vendor_invoice" model="ir.actions.report">
+			<field name="name">Vendor Bill report</field>
+			<field name="model">account.move</field>
+			<field name="report_type">qweb-pdf</field>
+			<field name="report_name">supplier_invoice.report_doc_invoice_template</field>
+			<field name="report_file">supplier_invoice.report_doc_invoice_template</field>
+			<field name="print_report_name">(object)</field>
+			<field name="binding_model_id" ref="model_vendor_wizard"/>
+			<field name="binding_type">report</field>
+		</record>
+
+
+
+		<template id="report_vendor_report_template">
+			<t t-call="web.external_layout">
+				<div class="page">
+					<div class="oe_structure"/>
+
+					<div class="row mt32 mb32" id="informations">
+						<div class="col-auto col-3 mw-100 mb-2">
+							<strong>Hello: </strong>
+							<!-- <t t-if="doc.move_id"> -->
+							<p class="m-0" t-out="docs.partner_id.name"/>
+						</div>
+					</div>
+
+					<!-- <div class="row mt32 mb32" id="informations">
+						<div class="col-auto col-3 mw-100 mb-2">
+							<strong>Hello: </strong>
+							<t t-foreach='docs.invoice_line_ids' t-as='prc'>
+							<p class="m-0" t-out="prc.price_unit"/>
+						</t>
+						</div>
+					</div> -->
+
+					<!-- <table class="table table-bordered" >
+                		<thead style="display: table-row-group">
+                            <tr border= '1px solid black'>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Price</th>
+                            </tr>
+                            <t t-foreach="docs.invoice_line_ids" t-as="invoice_lines">
+                                  <tr border= '1px solid black'>
+                                  <td><t t-out="invoice_lines.product_id.name"/></td>
+                                  <td><t t-out="invoice_lines.quantity"/></td>
+                                  <td><t t-out="invoice_lines.price_unit"/></td>
+                                   <td><t t-esc="(order_lines.price_subtotal*5)/100"/> (5%)</td>
+                              </tr>
+                              </t>
+                        </table>  -->
+
+                    <table class="table table-bordered" >
+		                <thead style="display: table-row-group">
+		                    <tr>
+		                        <th class="text-left">Invoice Number</th>
+		                        <th class="text-left">Product</th>
+		                        <th class="text-left">Commission</th>
+		                        <th class="text-left">date</th>
+		                        <!-- <th class="text-left">Total</th> -->
+		                    </tr>
+		                </thead>
+		                 
+
+		                <tr t-foreach="docs" t-as="invoices">
+			                 <tr t-foreach="invoices.invoice_line_ids" t-as="invoice_line">
+			                    <td><t t-out="invoices.name" /></td>
+			                    <td><t t-out="invoice_line.product_id.name" /></td>
+			                    <td><t t-out="invoice_line.price_unit" /></td>
+			                    <td><t t-out="invoices.invoice_date"/></td>
+			                </tr>            
+			                	
+		            	</tr>
+		                 	<!-- <tr t-foreach="docs" t-as="docs_date">
+		                    	<td><t t-out="docs_date.invoice_date"/></td>
+		                    </tr> -->
+           		</table>       
+
+			<!-- <div class="row mt32 mb32" id="informations">
+				<div class="col-auto col-3 mw-100 mb-2">
+					<strong>Your Book:</strong>
+					<p class="m-0" t-field="doc.name"/>
+					<p>Is on Top</p>
+				</div>   
+				<div class="col-auto col-3 mw-100 mb-2">
+					<strong>With ISBN Number:</strong>
+					<p class="m-0" t-field="doc.isbn_number"/>
+				</div>   
+			</div> -->
+				</div>
+				<br/><br/>
+			</t>
+		</template>
+
+		<template id="report_doc_invoice_template">
+			<t t-call="web.html_container">
+					<t t-call="supplier_invoice.report_vendor_report_template"/>
+			</t>
+		</template>
+
+	</data>
+
+</odoo>

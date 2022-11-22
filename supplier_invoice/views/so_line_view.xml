@@ -1,0 +1,42 @@
+<odoo>
+    <record id="so_line_inherit_line" model="ir.ui.view">
+        <field name="name">sale.order.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            
+            <xpath expr="//field[@name='payment_term_id']" position="after"> 
+                <field name="commission_person_id"/>
+            </xpath>
+
+            <xpath expr="/form/sheet/notebook/page/field[@name='order_line']/tree/field[@name='product_uom_qty']" position="before">
+                <field name='commission'/>
+                <field name='commission_value'/>
+            </xpath>
+
+            <xpath expr="//button[@id='action_confirm']" position="after">
+                <button name='send_mail_sale_order' string="Send Custom Mail" class="oe_highlight" type="object"/>
+            </xpath>
+
+            <xpath expr="//group[@name='sale_total']/field[@name='tax_totals_json']" position="after">
+                <field name='total_commission'/>
+            </xpath>
+
+        </field>     
+        
+    </record>
+
+
+
+
+     <!-- server action -->
+
+        <record id="model_sale_quote_combine" model="ir.actions.server">
+            <field name="name">Combine sale</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="binding_model_id" ref="sale.model_sale_order"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">records.action_sale_quote_combine()</field>
+        </record>
+</odoo>

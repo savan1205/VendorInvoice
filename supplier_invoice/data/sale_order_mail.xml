@@ -1,0 +1,62 @@
+<odoo>
+    <data noupdate="0">
+        <record id="email_template_for_so" model="mail.template">
+            <field name="name">Sales Order: Send by email</field>
+            <field name="model_id" ref="sale.model_sale_order"/>
+            <field name="subject">{{ object.company_id.name }} </field>
+            <field name="email_from">{{ (object.user_id.email_formatted or user.email_formatted) }}</field>
+            <field name="partner_to">{{ object.partner_id.id }}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Hello,savan
+                        <br/><br/>
+                        Partner Name is:<t t-esc="object.partner_id.name"/>
+
+
+
+                        <table border= '1px solid black'>
+                            <tr border= '1px solid black'>
+                                <th>Product</th>
+                                <th>Quantity</th>
+                                <th>Subtotal</th>
+                                <th>Discount</th>
+                            </tr>
+                            <t t-foreach="object.order_line" t-as="order_lines">
+                                  <tr border= '1px solid black'>
+                                  <td><t t-out="order_lines.product_id.name"/></td>
+                                  <td><t t-out="order_lines.product_uom_qty"/></td>
+                                  <td><t t-out="order_lines.price_subtotal"/></td>
+                                  <td><t t-esc="(order_lines.price_subtotal*5)/100"/> (5%)</td>
+                              </tr>
+                              </t>
+                        </table>
+
+                        <!-- <t t-esc="object.partner_id.name"/> -->
+                        
+                            <!-- <t t-if="ctx.get('proforma')">
+                                Pro forma invoice for <t t-out="doc_name or ''">quotation</t> <strong t-out="object.name or ''">S00052</strong>
+                                <t t-if="object.origin">
+                                    (with reference: <t t-out="object.origin or ''"></t> )
+                                </t>
+                                amounting in <strong t-out="format_amount(object.amount_total, object.pricelist_id.currency_id) or ''">$ 10.00</strong> is available.
+                            </t>
+                            <t t-else="">
+                                <t t-out="doc_name or ''">quotation</t> <strong t-out="object.name or ''"></strong>
+                                <t t-if="object.origin">
+                                    (with reference: <t t-out="object.origin or ''">S00052</t> )
+                                </t>
+                                amounting in <strong t-out="format_amount(object.amount_total, object.pricelist_id.currency_id) or ''">$ 10.00</strong> is ready for review.
+                                </t>
+                                <br/><br/>
+                                Do not hesitate to contact us if you have any questions.
+                                <br/> -->
+                    </p>
+                </div>
+            </field>
+
+            <field name="lang">{{ object.partner_id.lang }}</field>
+            <field name="auto_delete" eval="True"/>
+        </record>
+    </data>
+</odoo>
